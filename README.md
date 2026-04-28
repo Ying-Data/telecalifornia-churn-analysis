@@ -122,7 +122,7 @@ This analysis answers four questions leadership needs:
 ## 💡 Strategic Recommendations
 
 | Priority | Action | 
-|----------|--------|-------------------|
+|----------|--------|
 | 🔴 CRITICAL | Contract Upgrade Campaign (M-t-M → 1yr) 
 | 🔴 CRITICAL | Onboarding Excellence (0–6M programme)
 | 🔴 CRITICAL | Fiber Optic Retention Programme 
