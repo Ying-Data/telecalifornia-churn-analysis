@@ -181,9 +181,3 @@ Specializing in Business Intelligence, Power BI, Python, and end-to-end data sto
 [![GitHub](https://img.shields.io/badge/GitHub-Ying--Data-black?logo=github)](https://github.com/Ying-Data)
 [![Email](https://img.shields.io/badge/Email-weiying.data%40gmail.com-red?logo=gmail)](mailto:weiying.data@gmail.com)
 
----
-*Analysis conducted in April 2026 · Dataset: Maven Analytics Telco Churn*
-=======
-# telecalifornia-churn-analysis
-End-to-end customer churn prediction for a California telecom — EDA, ML (AUC 0.93), Power BI dashboard &amp; strategic ROI recommendations
->>>>>>> e16935aebec5e097056e66ca48250b504f672478
