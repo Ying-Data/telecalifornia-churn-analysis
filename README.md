@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 📊 TeleCalifornia — Customer Churn Intelligence
 
 > **28.4% of customers are leaving — and they're the highest-paying ones.**  
@@ -120,7 +121,7 @@ This analysis answers four questions leadership needs:
 
 ## 💡 Strategic Recommendations
 
-| Priority | Action | Est. Annual Savings |
+| Priority | Action | 
 |----------|--------|-------------------|
 | 🔴 CRITICAL | Contract Upgrade Campaign (M-t-M → 1yr) 
 | 🔴 CRITICAL | Onboarding Excellence (0–6M programme)
@@ -182,3 +183,7 @@ Specializing in Business Intelligence, Power BI, Python, and end-to-end data sto
 
 ---
 *Analysis conducted in April 2026 · Dataset: Maven Analytics Telco Churn*
+=======
+# telecalifornia-churn-analysis
+End-to-end customer churn prediction for a California telecom — EDA, ML (AUC 0.93), Power BI dashboard &amp; strategic ROI recommendations
+>>>>>>> e16935aebec5e097056e66ca48250b504f672478
