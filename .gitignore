@@ -1,0 +1,26 @@
+# Raw data (too large, link to Kaggle instead)
+telecom_customer_churn.csv
+telecom_data_dictionary.csv
+telecom_zipcode_population.csv
+
+# Python auto-generated files
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# Jupyter notebooks (only show polished .py)
+*.ipynb
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/
+
+# Secrets (NEVER push these)
+*.env
+credentials.json
+config.yaml

@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TeleCalifornia — Customer Churn Intelligence Report 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   PRINT-READY A4 REPORT — Chrome optimized
+   Main text: 12pt | A4: 210×297mm
+   ========================================================= */
+:root{
+  --navy:#1B2A4A;
+  --navy2:#243352;
+  --orange:#E8854A;
+  --teal:#2E8B8B;
+  --green:#1A7A45;
+  --red:#C0392B;
+  --gold:#B8860B;
+  --light:#FAFAF8;
+  --cream:#F5F2EC;
+  --border:#D8D0C4;
+  --text:#2C3440;
+}
+
+/* Reset */
+*{margin:0;padding:0;box-sizing:border-box}
+
+/* Screen preview */
+body{
+  font-family:'Source Serif 4',Georgia,serif;
+  background:#E8E4DE;
+  color:var(--text);
+  font-size:12pt;
+  line-height:1.7;
+}
+
+/* A4 page container */
+.page{
+  width:210mm;
+  min-height:297mm;
+  background:#fff;
+  margin:0 auto;
+  padding:18mm 18mm 16mm 20mm;
+  box-shadow:0 4px 32px rgba(0,0,0,0.15);
+  position:relative;
+  page-break-after:always;
+}
+
+/* ---- TYPOGRAPHY ---- */
+h1{font-family:'Playfair Display',serif;font-size:28pt;font-weight:700;
+   line-height:1.15;color:var(--navy);letter-spacing:-0.5px}
+h2{font-family:'Playfair Display',serif;font-size:14pt;font-weight:600;
+   color:var(--navy);margin:14pt 0 6pt;letter-spacing:-0.2px}
+h3{font-family:'DM Mono',monospace;font-size:8pt;font-weight:500;
+   text-transform:uppercase;letter-spacing:2px;color:var(--orange);
+   margin:12pt 0 4pt}
+p{font-size:12pt;line-height:1.75;color:var(--text);margin-bottom:7pt}
+small{font-size:9pt;color:#6B7A8D}
+
+/* ---- COVER PAGE ---- */
+.cover{display:flex;flex-direction:column;justify-content:space-between;height:261mm}
+.cover-top{}
+.cover-rule{width:100%;height:3px;background:linear-gradient(90deg,var(--orange),var(--teal));margin:0 0 16pt}
+.cover-label{font-family:'DM Mono',monospace;font-size:8.5pt;letter-spacing:3px;
+  text-transform:uppercase;color:var(--orange);margin-bottom:10pt}
+.cover-title{font-family:'Playfair Display',serif;font-size:38pt;font-weight:700;
+  line-height:1.1;color:var(--navy);margin-bottom:8pt}
+.cover-subtitle{font-family:'Source Serif 4',serif;font-size:14pt;font-style:italic;
+  color:#5A6A7A;font-weight:300;margin-bottom:24pt}
+.cover-abstract{font-size:12pt;line-height:1.8;color:var(--text);
+  max-width:148mm;border-left:3px solid var(--orange);padding-left:14pt;
+  margin-bottom:28pt}
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10pt;margin-top:4pt}
+.kpi-box{background:var(--cream);border:1px solid var(--border);border-top:3px solid var(--orange);
+  padding:10pt 10pt 8pt;border-radius:3px}
+.kpi-value{font-family:'Playfair Display',serif;font-size:20pt;font-weight:700;
+  color:var(--navy);line-height:1.1}
+.kpi-label{font-family:'DM Mono',monospace;font-size:7pt;text-transform:uppercase;
+  letter-spacing:1.5px;color:var(--orange);margin-top:3pt}
+.kpi-sub{font-size:8.5pt;color:#6B7A8D;margin-top:2pt}
+.cover-bottom{border-top:1px solid var(--border);padding-top:10pt;
+  display:flex;justify-content:space-between;align-items:flex-end}
+.cover-author{font-family:'DM Mono',monospace;font-size:9pt;color:#5A6A7A;line-height:1.8}
+.cover-author strong{color:var(--navy);display:block;font-size:11pt}
+.cover-date{font-family:'DM Mono',monospace;font-size:9pt;color:#8A96A4;text-align:right}
+
+/* ---- SECTION DIVIDER ---- */
+.section-header{display:flex;align-items:center;gap:10pt;margin:0 0 10pt}
+.section-num{width:28pt;height:28pt;background:var(--navy);color:var(--orange);
+  font-family:'Playfair Display',serif;font-size:14pt;font-weight:700;
+  display:flex;align-items:center;justify-content:center;border-radius:3px;flex-shrink:0}
+.section-title{font-family:'Playfair Display',serif;font-size:17pt;font-weight:600;
+  color:var(--navy);border-bottom:1.5px solid var(--orange);padding-bottom:4pt;
+  flex:1}
+
+/* ---- DIVIDERS ---- */
+.rule{width:100%;height:1px;background:var(--border);margin:10pt 0}
+.rule-heavy{width:100%;height:2px;background:linear-gradient(90deg,var(--orange),var(--teal));margin:12pt 0}
+
+/* ---- TABLES ---- */
+table{width:100%;border-collapse:collapse;font-size:10.5pt;margin:8pt 0 10pt}
+thead tr{background:var(--navy)}
+thead th{color:#fff;padding:7pt 9pt;text-align:left;font-family:'DM Mono',monospace;
+  font-size:8pt;text-transform:uppercase;letter-spacing:1px;font-weight:500}
+tbody tr:nth-child(even){background:#F7F4EF}
+tbody td{padding:6pt 9pt;border-bottom:1px solid var(--border);vertical-align:top}
+.td-val{font-weight:600;color:var(--navy);font-family:'DM Mono',monospace;font-size:10pt}
+.td-red{color:var(--red);font-weight:700}
+.td-green{color:var(--green);font-weight:700}
+.td-orange{color:var(--orange);font-weight:700}
+
+/* ---- HIGHLIGHT BOXES ---- */
+.callout{background:var(--cream);border-left:4px solid var(--orange);
+  padding:10pt 12pt;margin:10pt 0;border-radius:0 4px 4px 0}
+.callout.teal{border-left-color:var(--teal)}
+.callout.red{border-left-color:var(--red)}
+.callout.green{border-left-color:var(--green)}
+.callout-label{font-family:'DM Mono',monospace;font-size:7.5pt;text-transform:uppercase;
+  letter-spacing:1.5px;color:var(--orange);margin-bottom:4pt}
+.callout.teal .callout-label{color:var(--teal)}
+.callout.red .callout-label{color:var(--red)}
+.callout.green .callout-label{color:var(--green)}
+.callout p{margin:0;font-size:11pt}
+
+/* ---- 2-COLUMN LAYOUT ---- */
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:14pt;margin:8pt 0}
+.col3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10pt;margin:8pt 0}
+
+/* ---- INSIGHT CARD ---- */
+.insight{background:var(--navy);color:#fff;padding:10pt 12pt;border-radius:4px}
+.insight .num{font-family:'Playfair Display',serif;font-size:22pt;font-weight:700;
+  color:var(--orange);line-height:1.1;margin-bottom:2pt}
+.insight .lbl{font-family:'DM Mono',monospace;font-size:7.5pt;text-transform:uppercase;
+  letter-spacing:1.5px;color:rgba(255,255,255,0.6)}
+.insight .desc{font-size:9.5pt;color:rgba(255,255,255,0.8);margin-top:4pt;line-height:1.5}
+
+/* ---- RISK BAR ---- */
+.risk-bar-wrap{margin:6pt 0}
+.risk-bar-label{font-size:10pt;margin-bottom:3pt;display:flex;justify-content:space-between}
+.risk-bar-label span{font-family:'DM Mono',monospace;font-size:9pt;font-weight:600;color:var(--navy)}
+.risk-bar-track{width:100%;height:8pt;background:#E8E4DE;border-radius:2px;overflow:hidden}
+.risk-bar-fill{height:100%;border-radius:2px}
+
+/* ---- WATERFALL TABLE ---- */
+.wf-table{width:100%;border-collapse:collapse;font-size:11pt;margin:8pt 0}
+.wf-table td{padding:6pt 8pt;border-bottom:1px solid var(--border)}
+.wf-table .wf-label{font-weight:600}
+.wf-table .wf-pos{color:var(--green);font-family:'DM Mono',monospace;font-weight:700;text-align:right}
+.wf-table .wf-neg{color:var(--red);font-family:'DM Mono',monospace;font-weight:700;text-align:right}
+.wf-table .wf-tot{color:var(--navy);font-family:'DM Mono',monospace;font-weight:700;
+  font-size:12pt;text-align:right;background:#F7F4EF}
+.wf-table .wf-indent{padding-left:18pt;font-style:italic;font-size:10.5pt;color:#5A6A7A}
+.wf-table .wf-indent .wf-neg{font-size:10.5pt}
+
+/* ---- PRIORITY DOTS ---- */
+.priority{display:inline-block;width:9pt;height:9pt;border-radius:50%;
+  margin-right:5pt;vertical-align:middle;flex-shrink:0}
+.p-critical{background:var(--red)}
+.p-high{background:var(--orange)}
+.p-medium{background:var(--gold)}
+
+/* ---- RECOMMENDATION ROW ---- */
+.rec-row{display:flex;gap:8pt;align-items:flex-start;padding:7pt 0;border-bottom:1px dashed var(--border)}
+.rec-row:last-child{border-bottom:none}
+.rec-icon{width:18pt;flex-shrink:0;padding-top:1pt}
+.rec-content{flex:1}
+.rec-title{font-size:11pt;font-weight:600;color:var(--navy)}
+.rec-detail{font-size:10pt;color:#5A6A7A;margin-top:2pt}
+.rec-roi{font-family:'DM Mono',monospace;font-size:9.5pt;font-weight:700;
+  color:var(--green);white-space:nowrap;margin-left:auto;padding-top:1pt}
+
+/* ---- FOOTER ---- */
+.page-footer{position:absolute;bottom:10mm;left:20mm;right:18mm;
+  display:flex;justify-content:space-between;align-items:center;
+  border-top:1px solid var(--border);padding-top:5pt}
+.page-footer-left{font-family:'DM Mono',monospace;font-size:7.5pt;color:#9AABB5}
+.page-footer-right{font-family:'DM Mono',monospace;font-size:7.5pt;color:#9AABB5}
+.page-footer-center{font-family:'DM Mono',monospace;font-size:7.5pt;color:#9AABB5}
+
+/* ---- PRINT SETTINGS ---- */
+@media screen{
+  body{padding:12mm 0}
+  .page{margin-bottom:8mm}
+}
+
+@media print{
+  @page{
+    size:A4 portrait;
+    margin:0;
+  }
+  body{background:white;padding:0}
+  .page{
+    box-shadow:none;
+    margin:0;
+    width:210mm;
+    min-height:297mm;
+    padding:18mm 18mm 20mm 20mm;
+    page-break-after:always;
+  }
+  .page:last-child{page-break-after:avoid}
+  a{color:inherit;text-decoration:none}
+  .no-print{display:none}
+}
+
+/* Screen-only print button */
+.print-btn{
+  position:fixed;bottom:20px;right:20px;
+  background:var(--navy);color:#fff;
+  border:none;padding:12px 22px;border-radius:8px;
+  font-family:'DM Mono',monospace;font-size:12px;font-weight:600;
+  cursor:pointer;z-index:100;
+  box-shadow:0 4px 16px rgba(0,0,0,0.25);
+  transition:background 0.2s;
+  letter-spacing:1px;
+}
+.print-btn:hover{background:var(--orange)}
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">🖨 Print / Save PDF</button>
+
+<!-- ============================================================
+     PAGE 1 — COVER PAGE
+     ============================================================ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-top">
+      <div class="cover-rule"></div>
+      <div class="cover-label">Confidential · Customer Intelligence Report · April 2026</div>
+      <div class="cover-title">TeleCalifornia<br>Churn Intelligence</div>
+      <div class="cover-subtitle">End-to-End Predictive Analysis & Retention Strategy</div>
+      <div class="cover-abstract">
+        TeleCalifornia is losing <strong>$1,65M annually</strong> to customer churn — and the customers who leave pay <strong>15% more</strong> than those who stay. This report identifies the root causes, predicts which customers will leave next (AUC 0,93), and delivers a data-driven retention playbook with ROI scenarios modelled directly from actual customer data.
+      </div>
+
+      <div class="kpi-strip">
+        <div class="kpi-box">
+          <div class="kpi-value">28,4%</div>
+          <div class="kpi-label">Churn Rate</div>
+          <div class="kpi-sub">vs ~20% industry avg (excl. new joiners)</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-value">$3,68M</div>
+          <div class="kpi-label">Revenue Lost</div>
+          <div class="kpi-sub">from 1.869 churned customers</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-value">0,9251</div>
+          <div class="kpi-label">Model AUC</div>
+          <div class="kpi-sub">5-fold CV: 0,9281 ± 0,005</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-value">1.511</div>
+          <div class="kpi-label">At-Risk Customers</div>
+          <div class="kpi-sub">Critical Risk tier</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="rule-heavy" style="margin:18pt 0 10pt"></div>
+      <div class="col2">
+        <div>
+          <h3>Scope of Analysis</h3>
+          <p style="font-size:10.5pt">Three datasets merged: 7.043 customer records, 1.671 ZIP code populations, data dictionary. 15 engineered features. End-to-end pipeline in Python.</p>
+        </div>
+        <div>
+          <h3>Deliverables</h3>
+          <p style="font-size:10.5pt">This report · Power BI dashboard (4 pages + simulator) · Excel workbook (6 tabs) · Clean dataset (57 columns) · Python ML pipeline</p>
+        </div>
+      </div>
+      <div class="cover-bottom">
+        <div class="cover-author">
+          <strong>Ying Zhao</strong>
+          Data Analyst · Antwerpen, Belgium<br>
+          weiying.data@gmail.com · linkedin.com/in/weiying-zhao
+        </div>
+        <div class="cover-date">
+          April 2026<br>
+          Prepared for<br>
+          TeleCalifornia Leadership
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="page-footer-left">TELECALIFORNIA · CONFIDENTIAL</div>
+    <div class="page-footer-center">Churn Intelligence Report · 2026</div>
+    <div class="page-footer-right">Page 1 of 4</div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     PAGE 2 — PROBLEM FRAMING + EDA + REVENUE
+     ============================================================ -->
+<div class="page">
+
+  <!-- SECTION 1: BUSINESS CONTEXT -->
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">Business Context & Revenue Impact</div>
+  </div>
+
+  <p>Customer churn is the silent killer of telecom profitability. At TeleCalifornia, 1 in 4 customers churns each cycle — but the financial damage is disproportionate: churners are the company's <em>highest-value</em> customers, paying an average of <strong>$73,43/month</strong> versus $63,69 for the overall base.</p>
+
+  <div class="col3" style="margin:10pt 0">
+    <div class="insight">
+      <div class="num">$73,43</div>
+      <div class="lbl">Avg Monthly Charge</div>
+      <div class="desc">Churners pay 15% MORE than average. Retention = premium revenue recovery.</div>
+    </div>
+    <div class="insight">
+      <div class="num">$1,65M</div>
+      <div class="lbl">Est. Annual Revenue Lost</div>
+      <div class="desc">Recurring run-rate loss assuming no intervention. Replacement cost: $561K.</div>
+    </div>
+    <div class="insight">
+      <div class="num">77,2%</div>
+      <div class="lbl">0–6 Month Churn Rate</div>
+      <div class="desc">New customers are 8× more likely to leave than those who reach year 4+.</div>
+    </div>
+  </div>
+
+  <h3>Revenue Waterfall — Where the Money Goes</h3>
+  <table class="wf-table">
+    <tr>
+      <td class="wf-label">Total Revenue (all customers)</td>
+      <td class="wf-pos">$21.371.132</td>
+    </tr>
+    <tr>
+      <td class="wf-indent">Revenue from Stayed customers (4.720)</td>
+      <td class="wf-pos">$17.685.672</td>
+    </tr>
+    <tr>
+      <td class="wf-indent" style="color:var(--red)">Revenue Lost to Churn (1.869 customers)</td>
+      <td class="wf-neg">− $3.684.460</td>
+    </tr>
+    <tr>
+      <td class="wf-label" style="font-size:10.5pt;color:#6B7A8D">New Customer Revenue (454 joined)</td>
+      <td style="text-align:right;font-family:'DM Mono',monospace;color:#6B7A8D">$976.469 (partial-cycle)</td>
+    </tr>
+    <tr>
+      <td class="wf-label" style="font-weight:700">Estimated Annual Revenue at Risk (current pace)</td>
+      <td class="wf-tot">$1.647.780 / yr</td>
+    </tr>
+  </table>
+
+  <div class="rule"></div>
+
+  <!-- SECTION 2: CHURN DRIVERS -->
+  <div class="section-header" style="margin-top:10pt">
+    <div class="section-num">2</div>
+    <div class="section-title">Churn Drivers — Segment Analysis</div>
+  </div>
+
+  <div class="col2">
+    <div>
+      <h3>Churn Rate by Contract Type</h3>
+      <div class="risk-bar-wrap">
+        <div class="risk-bar-label">Month-to-Month <span>51,7%</span></div>
+        <div class="risk-bar-track"><div class="risk-bar-fill" style="width:51,7%;background:var(--red)"></div></div>
+      </div>
+      <div class="risk-bar-wrap">
+        <div class="risk-bar-label">One Year <span>10,9%</span></div>
+        <div class="risk-bar-track"><div class="risk-bar-fill" style="width:10,9%;background:var(--orange)"></div></div>
+      </div>
+      <div class="risk-bar-wrap">
+        <div class="risk-bar-label">Two Year <span>2,6%</span></div>
+        <div class="risk-bar-track"><div class="risk-bar-fill" style="width:2,6%;background:var(--green)"></div></div>
+      </div>
+      <p style="font-size:9.5pt;color:#6B7A8D;margin-top:5pt">Month-to-Month customers are <strong>20× more likely</strong> to churn than Two-Year contract holders.</p>
+    </div>
+    <div>
+      <h3>Churn Rate by Internet Type</h3>
+      <div class="risk-bar-wrap">
+        <div class="risk-bar-label">Fiber Optic <span>42,1%</span></div>
+        <div class="risk-bar-track"><div class="risk-bar-fill" style="width:42,1%;background:var(--red)"></div></div>
+      </div>
+      <div class="risk-bar-wrap">
+        <div class="risk-bar-label">Cable <span>27,5%</span></div>
+        <div class="risk-bar-track"><div class="risk-bar-fill" style="width:27,5%;background:var(--orange)"></div></div>
+      </div>
+      <div class="risk-bar-wrap">
+        <div class="risk-bar-label">DSL <span>20,0%</span></div>
+        <div class="risk-bar-track"><div class="risk-bar-fill" style="width:20%;background:var(--gold)"></div></div>
+      </div>
+      <div class="risk-bar-wrap">
+        <div class="risk-bar-label">No Internet <span>8,4%</span></div>
+        <div class="risk-bar-track"><div class="risk-bar-fill" style="width:8,4%;background:var(--green)"></div></div>
+      </div>
+      <p style="font-size:9.5pt;color:#6B7A8D;margin-top:5pt">Fiber users are the highest-paying segment yet churn at twice the rate of non-internet customers.</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:10pt">Why Customers Leave — Primary Churn Reasons</h3>
+  <table>
+    <thead><tr>
+      <th>Churn Category</th>
+      <th>% of Churners</th>
+      <th>Estimated Revenue Impact</th>
+      <th>Controllable?</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>Competitor (better offer / device)</td><td class="td-val td-red">45,1%</td><td class="td-val">$1,66M</td><td>✓ High — pricing & device programs</td></tr>
+      <tr><td>Customer Dissatisfaction</td><td class="td-val td-orange">16,7%</td><td class="td-val">$615K</td><td>✓ High — service quality & NPS</td></tr>
+      <tr><td>Attitude / Poor Service</td><td class="td-val td-orange">16,2%</td><td class="td-val">$597K</td><td>✓ High — staff training & CX</td></tr>
+      <tr><td>Price Sensitivity</td><td class="td-val">11,3%</td><td class="td-val">$416K</td><td>~ Partial — loyalty discounts</td></tr>
+      <tr><td>Other / Unknown</td><td class="td-val">10,7%</td><td class="td-val">$394K</td><td>– Requires investigation</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout red">
+    <div class="callout-label">Critical Finding</div>
+    <p><strong>78% of churn is directly actionable</strong> — it stems from competitor pressure, service quality, and attitude issues, all of which are within management's control. Only 11% is price-driven.</p>
+  </div>
+
+  <div class="page-footer">
+    <div class="page-footer-left">TELECALIFORNIA · CONFIDENTIAL</div>
+    <div class="page-footer-center">Churn Intelligence Report · 2026</div>
+    <div class="page-footer-right">Page 2 of 4</div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     PAGE 3 — MACHINE LEARNING MODEL
+     ============================================================ -->
+<div class="page">
+
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div class="section-title">Predictive Model — Who Will Churn Next?</div>
+  </div>
+
+  <p>A Random Forest classification model was trained on 5.589 customers (train/test split 80/20) with 5-fold cross-validation. The model predicts individual churn probability for all 7.043 customers, enabling proactive — not reactive — retention.</p>
+
+  <div class="col2">
+    <div>
+      <h3>Model Performance</h3>
+      <table>
+        <thead><tr><th>Metric</th><th>Score</th></tr></thead>
+        <tbody>
+          <tr><td>AUC-ROC</td><td class="td-val td-green">0,9251</td></tr>
+          <tr><td>5-Fold CV AUC</td><td class="td-val td-green">0,9281 ± 0,005</td></tr>
+          <tr><td>Accuracy</td><td class="td-val">85,1%</td></tr>
+          <tr><td>Precision (churn)</td><td class="td-val">73%</td></tr>
+          <tr><td>Recall (churn)</td><td class="td-val">76%</td></tr>
+          <tr><td>F1-Score (churn)</td><td class="td-val">0,75</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:9.5pt;color:#6B7A8D;margin-top:4pt">AUC of 0,93 means the model correctly distinguishes churners from non-churners 93% of the time — far superior to random guessing (0,50) and industry benchmarks (~0,80).</p>
+    </div>
+    <div>
+      <h3>Confusion Matrix</h3>
+      <table>
+        <thead><tr><th></th><th>Predicted: Stay</th><th>Predicted: Churn</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Actual: Stay</strong></td><td class="td-val td-green">837 (TN)</td><td class="td-val td-red">107 (FP)</td></tr>
+          <tr><td><strong>Actual: Churn</strong></td><td class="td-val" style="color:var(--gold)">89 (FN)</td><td class="td-val td-green">285 (TP)</td></tr>
+        </tbody>
+      </table>
+      <div class="callout teal" style="margin-top:8pt">
+        <div class="callout-label">Business Interpretation</div>
+        <p style="font-size:10.5pt">The model correctly identifies <strong>285 of 374 actual churners</strong>. The 89 missed (FN) represent $784K in annual revenue — acceptable given the model's overall precision.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:12pt">Top 10 Churn Predictors (Feature Importance)</h3>
+  <table>
+    <thead><tr>
+      <th>Rank</th><th>Feature</th><th>Importance</th><th>Business Meaning</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Contract_Risk Score</td><td class="td-val">14,7%</td><td>Engineered: M-t-M=3, 1yr=2, 2yr=1</td></tr>
+      <tr><td>2</td><td>Contract Type</td><td class="td-val">12,3%</td><td>Month-to-Month is the #1 raw driver</td></tr>
+      <tr><td>3</td><td>Tenure (months)</td><td class="td-val">10,7%</td><td>New customers are highest risk</td></tr>
+      <tr><td>4</td><td>Total Revenue</td><td class="td-val">7,2%</td><td>Longer-tenure = higher LTV = lower churn</td></tr>
+      <tr><td>5</td><td>Number of Referrals</td><td class="td-val">6,3%</td><td>Loyal advocates rarely leave</td></tr>
+      <tr><td>6</td><td>Monthly Charge</td><td class="td-val">5,8%</td><td>High charges + short tenure = flight risk</td></tr>
+      <tr><td>7</td><td>Internet Type</td><td class="td-val">4,9%</td><td>Fiber = high churn despite high value</td></tr>
+      <tr><td>8</td><td>Age</td><td class="td-val">4,1%</td><td>Younger segments (18-35) churn more</td></tr>
+      <tr><td>9</td><td>Est. CLTV</td><td class="td-val">3,7%</td><td>Engineered lifetime value score</td></tr>
+      <tr><td>10</td><td>Service Bundle Score</td><td class="td-val">3,2%</td><td>More services = more engagement = less churn</td></tr>
+    </tbody>
+  </table>
+
+  <div class="rule"></div>
+
+  <h3>Risk Tier Segmentation — Action Priority</h3>
+  <div class="col2">
+    <div>
+      <table>
+        <thead><tr><th>Risk Tier</th><th>Customers</th><th>Annual Revenue Exposure</th></tr></thead>
+        <tbody>
+          <tr><td><span class="priority p-critical"></span><strong>Critical Risk</strong> (prob ≥ 0,70)</td><td class="td-val td-red">1.511</td><td class="td-val td-red">~$1,2M</td></tr>
+          <tr><td><span class="priority p-high"></span><strong>High Risk</strong> (0,50–0,70)</td><td class="td-val td-orange">696</td><td class="td-val td-orange">$5,4M</td></tr>
+          <tr><td><span class="priority p-medium"></span><strong>Medium Risk</strong> (0,30–0,50)</td><td class="td-val">962</td><td class="td-val">$7,1M</td></tr>
+          <tr><td><strong style="color:var(--green)">Low Risk</strong> (&lt; 0,30)</td><td class="td-val td-green">3.874</td><td class="td-val td-green">Secure</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="callout">
+        <div class="callout-label">Immediate Priority List</div>
+        <p style="font-size:10.5pt">The model has generated a <strong>ranked customer list</strong> by churn probability. The CRM team should contact the top 200 Critical Risk customers within 30 days — representing <strong>$1,76M in annual revenue</strong> that can potentially be retained with a targeted offer.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="page-footer-left">TELECALIFORNIA · CONFIDENTIAL</div>
+    <div class="page-footer-center">Churn Intelligence Report · 2026</div>
+    <div class="page-footer-right">Page 3 of 4</div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     PAGE 4 — STRATEGIC RECOMMENDATIONS + APPENDIX
+     ============================================================ -->
+<div class="page">
+
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div class="section-title">Strategic Retention Playbook</div>
+  </div>
+
+  <p>Six retention programs ranked by impact and feasibility. Conservative to optimistic ROI scenarios modelled against a <strong>$150K annual programme cost</strong>.</p>
+
+  <div class="rec-row">
+    <div class="rec-icon"><span class="priority p-critical" style="width:14pt;height:14pt;margin:0"></span></div>
+    <div class="rec-content">
+      <div class="rec-title">1 · Contract Upgrade Campaign — Month-to-Month → Annual</div>
+      <div class="rec-detail">Target 1.869 M-t-M churners with personalised upgrade offers (e.g., 2 months free or device discount). A 20% conversion converts 374 customers to 1-year contracts. Churn rate drops from 51,7% → ~30%.</div>
+    </div>
+    <div class="rec-roi">$290K–$430K/yr</div>
+  </div>
+
+  <div class="rec-row">
+    <div class="rec-icon"><span class="priority p-critical" style="width:14pt;height:14pt;margin:0"></span></div>
+    <div class="rec-content">
+      <div class="rec-title">2 · Onboarding Excellence Programme — First 6 Months</div>
+      <div class="rec-detail">77,2% churn in months 0–6 signals broken onboarding. Implement a 90-day check-in sequence, proactive service calls at day 30, and a dedicated customer success rep for Fiber customers.</div>
+    </div>
+    <div class="rec-roi">$180K–$250K/yr</div>
+  </div>
+
+  <div class="rec-row">
+    <div class="rec-icon"><span class="priority p-critical" style="width:14pt;height:14pt;margin:0"></span></div>
+    <div class="rec-content">
+      <div class="rec-title">3 · Fiber Optic Retention Programme</div>
+      <div class="rec-detail">Fiber users churn at 42,1% despite paying ~$90+/month. Root cause: competitors offering better speeds/devices. Response: guaranteed speed SLA, annual device refresh, and loyalty pricing for 2-year Fiber contracts.</div>
+    </div>
+    <div class="rec-roi">$210K–$350K/yr</div>
+  </div>
+
+  <div class="rec-row">
+    <div class="rec-icon"><span class="priority p-high" style="width:14pt;height:14pt;margin:0"></span></div>
+    <div class="rec-content">
+      <div class="rec-title">4 · Pause Offer E Immediately — 67,6% Churn Rate</div>
+      <div class="rec-detail">Offer E has a catastrophic 67,6% churn rate vs. 6,7% for Offer A. This offer may be attracting price-sensitive, low-loyalty customers. Audit the offer structure and pause new enrollments pending review.</div>
+    </div>
+    <div class="rec-roi">$95K–$140K/yr</div>
+  </div>
+
+  <div class="rec-row">
+    <div class="rec-icon"><span class="priority p-high" style="width:14pt;height:14pt;margin:0"></span></div>
+    <div class="rec-content">
+      <div class="rec-title">5 · Competitive Intelligence & Device Trade-In Programme</div>
+      <div class="rec-detail">45% of churn cites "competitor made a better offer." Build a real-time competitive monitoring dashboard and launch an annual device upgrade programme for customers on contracts 18+ months.</div>
+    </div>
+    <div class="rec-roi">$130K–$200K/yr</div>
+  </div>
+
+  <div class="rec-row">
+    <div class="rec-icon"><span class="priority p-medium" style="width:14pt;height:14pt;margin:0"></span></div>
+    <div class="rec-content">
+      <div class="rec-title">6 · Activate ML Predictions in CRM</div>
+      <div class="rec-detail">Deploy the churn probability score (Churn_Probability column) directly into Salesforce or equivalent CRM. Set automated alerts when Critical Risk scores exceed 0,70, triggering a retention workflow.</div>
+    </div>
+    <div class="rec-roi">$100K–$180K/yr</div>
+  </div>
+
+  <div class="rule-heavy" style="margin:12pt 0 10pt"></div>
+
+  <h3>ROI Scenarios — Combined Programme Impact</h3>
+  <p style="font-size:9pt;color:#6B7A8D;margin-bottom:6pt">Calculated on active base of 6.589 customers (excl. 454 Joined). Avg monthly charge of churned customers: $73,43. Programme cost: $150K/yr.</p>
+  <table>
+    <thead><tr>
+      <th>Scenario</th><th>Churn Rate Reduction</th><th>Customers Retained</th><th>Revenue Saved</th><th>Net ROI (after $150K cost)</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>Conservative</td><td class="td-val">− 5 points</td><td class="td-val">~327</td><td class="td-val">$288K</td><td class="td-val td-green">+ $138K</td></tr>
+      <tr><td><strong>Base Case ★</strong></td><td class="td-val td-orange">− 8 points</td><td class="td-val td-orange">~525</td><td class="td-val td-orange">$463K</td><td class="td-val td-orange"><strong>+ $313K</strong></td></tr>
+      <tr><td>Optimistic</td><td class="td-val td-green">− 12 points</td><td class="td-val td-green">~788</td><td class="td-val td-green">$694K</td><td class="td-val td-green"><strong>+ $544K</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout green">
+    <div class="callout-label">Executive Summary</div>
+    <p><strong>At the base-case scenario</strong> — a realistic 8-point churn reduction achievable within 12 months — the programme retains <strong>~525 customers</strong> and delivers <strong>$313K in net annual savings</strong> after the $150K programme cost. The payback period on the investment is under 6 months. The business case is clear: act now on the Critical Risk list of 1.511 customers.</p>
+  </div>
+
+  <div class="rule" style="margin:10pt 0"></div>
+
+  <div class="col2">
+    <div>
+      <h3>Appendix — Data Quality Notes</h3>
+      <p style="font-size:10pt">Missing values: all explained by business logic. No internet service → no online security/backup/streaming fields (blank = "Not applicable", not missing). 120 customers with negative Monthly Charge treated as billing credits and clipped to zero. All 7.043 ZIP codes matched population data — 100% join rate.</p>
+    </div>
+    <div>
+      <h3>Appendix — Model Methodology</h3>
+      <p style="font-size:10pt">Algorithm: Random Forest (n_estimators=200, max_depth=12, class_weight='balanced'). Train/test: 80/20 stratified split. Validation: 5-fold cross-validation. Class imbalance handled via balanced class weights. Threshold: 0,50 for binary classification, 0,70 for Critical Risk tier.</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="page-footer-left">TELECALIFORNIA · CONFIDENTIAL</div>
+    <div class="page-footer-center">Ying Zhao · Data Analyst · weiying.data@gmail.com</div>
+    <div class="page-footer-right">Page 4 of 4</div>
+  </div>
+</div>
+
+</body>
+</html>

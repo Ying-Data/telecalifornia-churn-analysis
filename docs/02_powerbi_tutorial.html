@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power BI Dashboard — Step-by-Step Tutorial</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;0,700;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1B2A4A;--navy2:#243352;--orange:#E8854A;--teal:#2E8B8B;
+  --gold:#D4A843;--green:#27AE60;--red:#C0392B;--pbi:#F2C811;
+  --light:#F8F5F0;--white:#FFFFFF;--gray:#95A5A6;--card:#FEFEFE;
+  --border:#E8E0D5;--code-bg:#1E2D40;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--light);color:var(--navy)}
+
+.hero{background:linear-gradient(135deg,#1B2A4A 0%,#2C3E6A 60%,#1A3A5C 100%);
+  color:#fff;padding:80px 60px 60px;position:relative;overflow:hidden}
+.hero::after{content:'⚡';position:absolute;right:80px;top:50px;font-size:120px;opacity:0.05}
+.hero-badge{display:inline-block;background:rgba(242,200,17,0.2);border:1px solid var(--pbi);
+  color:var(--pbi);padding:6px 16px;border-radius:20px;font-size:12px;
+  font-family:'DM Mono',monospace;letter-spacing:1px;margin-bottom:24px}
+.hero h1{font-family:'Fraunces',serif;font-size:48px;font-weight:700;line-height:1.1;margin-bottom:16px}
+.hero h1 span{color:var(--pbi)}
+.hero p{font-size:16px;color:rgba(255,255,255,0.75);max-width:680px;margin-bottom:32px}
+.hero-meta{display:flex;gap:32px;flex-wrap:wrap}
+.hero-meta .m{font-size:12px;color:rgba(255,255,255,0.5)}
+.hero-meta .v{font-size:14px;font-weight:600;color:#fff}
+
+.container{max-width:980px;margin:0 auto;padding:60px 40px}
+
+.toc{background:var(--card);border-radius:16px;border:1px solid var(--border);
+  padding:32px 40px;margin-bottom:60px}
+.toc h3{font-family:'Fraunces',serif;font-size:20px;color:var(--navy);margin-bottom:20px}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.toc a{display:block;color:var(--navy2);text-decoration:none;font-size:13px;
+  padding:8px 12px;border-radius:8px;border-left:3px solid var(--border);transition:all 0.2s}
+.toc a:hover{border-left-color:var(--orange);background:#FEF5EE;color:var(--orange)}
+
+.step-section{margin-bottom:70px}
+.step-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:28px}
+.step-num{background:var(--navy);color:var(--pbi);font-family:'Fraunces',serif;
+  font-size:20px;font-weight:700;width:52px;height:52px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  border:2px solid var(--pbi)}
+.step-title{font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:var(--navy)}
+.step-subtitle{font-size:13px;color:var(--gray);margin-top:4px}
+
+.card{background:var(--card);border-radius:14px;border:1px solid var(--border);
+  padding:28px;margin-bottom:18px}
+.card h4{font-size:15px;font-weight:600;color:var(--navy2);margin-bottom:14px;
+  display:flex;align-items:center;gap:8px}
+.card h4::before{content:'';width:4px;height:18px;background:var(--orange);border-radius:2px;display:block}
+.card p,.card li{font-size:14px;color:#3D4F6B;line-height:1.8}
+.card ul,.card ol{padding-left:20px;margin-top:8px}
+.card li{margin-bottom:8px}
+
+/* Click steps */
+.click-step{display:flex;gap:16px;align-items:flex-start;padding:14px 0;
+  border-bottom:1px dashed var(--border)}
+.click-step:last-child{border-bottom:none}
+.click-num{background:var(--orange);color:#fff;font-size:11px;font-weight:700;
+  min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;margin-top:2px;font-family:'DM Mono',monospace}
+.click-text{font-size:14px;color:#2C3E50}
+.click-text strong{color:var(--navy)}
+kbd{background:#F4F4F4;border:1px solid #ccc;border-radius:4px;padding:1px 7px;
+  font-family:'DM Mono',monospace;font-size:12px;color:var(--navy)}
+.click-text code{background:#EBF5FB;color:var(--navy2);padding:1px 6px;border-radius:4px;
+  font-family:'DM Mono',monospace;font-size:12px}
+
+.checkpoint{background:linear-gradient(135deg,#EBF5FB,#E8F8F5);border:1px solid #AED6F1;
+  border-radius:12px;padding:20px 24px;margin:20px 0}
+.checkpoint h5{font-size:12px;font-weight:700;color:var(--teal);text-transform:uppercase;
+  letter-spacing:1.5px;margin-bottom:10px}
+.checkpoint ul{padding-left:18px}
+.checkpoint li{font-size:13px;color:#2C3E50;margin-bottom:5px}
+
+.dax-block{position:relative;background:var(--code-bg);border-radius:12px;margin:16px 0;overflow:hidden}
+.dax-label{background:rgba(242,200,17,0.15);padding:8px 20px;
+  font-family:'DM Mono',monospace;font-size:11px;color:var(--pbi);
+  letter-spacing:1px;border-bottom:1px solid rgba(242,200,17,0.1)}
+pre{padding:24px 20px;overflow-x:auto;font-family:'DM Mono',monospace;
+  font-size:13px;line-height:1.8;color:#A8D8EA}
+.copy-btn{position:absolute;top:8px;right:12px;background:rgba(242,200,17,0.7);
+  color:var(--navy);border:none;border-radius:6px;padding:5px 14px;font-size:11px;
+  cursor:pointer;transition:all 0.2s;font-weight:700}
+.copy-btn:hover{background:var(--pbi)}
+.copy-btn.copied{background:var(--green);color:#fff}
+
+.warn-box{background:#FEF9E7;border:1px solid #F9E79F;border-radius:12px;padding:16px 20px;margin:12px 0}
+.warn-box p{font-size:13px;color:#7D6608}
+.warn-box strong{color:#B7770D}
+
+.result-box{background:#EAFAF1;border:1px solid #A9DFBF;border-radius:12px;padding:20px 24px;margin:16px 0}
+.result-box h5{color:var(--green);font-weight:700;font-size:14px;margin-bottom:10px}
+.result-box ul{padding-left:18px}
+.result-box li{font-size:13px;color:#1D6A2E;margin-bottom:5px}
+
+.visual-spec{background:#F8F4FF;border:1px solid #D7BDE2;border-radius:12px;padding:20px 24px;margin:16px 0}
+.visual-spec h5{color:#8E44AD;font-size:13px;font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px}
+table.spec-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+.spec-table th{background:#8E44AD;color:#fff;padding:8px 12px;text-align:left}
+.spec-table td{padding:8px 12px;border-bottom:1px solid #E8DAEF}
+.spec-table tr:nth-child(even) td{background:#F5EEF8}
+
+footer{background:var(--navy);color:rgba(255,255,255,0.5);text-align:center;
+  padding:32px;font-size:12px;font-family:'DM Mono',monospace}
+footer span{color:var(--pbi)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">TUTORIAL 2 OF 5 · POWER BI DASHBOARD</div>
+  <h1>Build the <span>Power BI</span><br>Churn Dashboard</h1>
+  <p>Ultra-detailed step-by-step guide. Every click, every column, every DAX measure — explained for absolute beginners. No shortcuts. No assumptions.</p>
+  <div class="hero-meta">
+    <div><div class="m">Input File</div><div class="v">telecom_clean_powerbi.csv</div></div>
+    <div><div class="m">Tabs to Build</div><div class="v">4 Pages + Simulator</div></div>
+    <div><div class="m">Tool</div><div class="v">Power BI Desktop (free)</div></div>
+    <div><div class="m">Estimated Time</div><div class="v">3–4 hours</div></div>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="toc">
+  <h3>📋 Table of Contents</h3>
+  <div class="toc-grid">
+    <a href="#pre">PRE · Install Power BI Desktop</a>
+    <a href="#import">STEP 1 · Import clean CSV</a>
+    <a href="#types">STEP 2 · Set column data types</a>
+    <a href="#dax">STEP 3 · Create DAX measures</a>
+    <a href="#page1">STEP 4 · Page 1: Executive KPIs</a>
+    <a href="#page2">STEP 5 · Page 2: Churn Analysis</a>
+    <a href="#page3">STEP 6 · Page 3: ML Risk Map</a>
+    <a href="#page4">STEP 7 · Page 4: Revenue Waterfall</a>
+    <a href="#simulator">STEP 8 · Simulator Tab</a>
+    <a href="#theme">STEP 9 · Apply Theme & Publish</a>
+  </div>
+</div>
+
+<!-- PRE-REQUISITES -->
+<div class="step-section" id="pre">
+  <div class="step-header">
+    <div class="step-num">0</div>
+    <div><div class="step-title">Pre-Requisites — Install Power BI Desktop</div>
+    <div class="step-subtitle">Free download from Microsoft — takes 5 minutes</div></div>
+  </div>
+  <div class="card">
+    <h4>Installation steps</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Go to <strong>https://powerbi.microsoft.com/desktop</strong> in Chrome</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Click the big yellow button <strong>"Download free"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">Select <strong>"PBIDesktopSetup_x64.exe"</strong> (64-bit, recommended)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Run the installer. Keep all defaults. Click <kbd>Next</kbd> → <kbd>Install</kbd> → <kbd>Finish</kbd></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">Open Power BI Desktop. Sign in with a <strong>Microsoft account</strong> (free to create at outlook.com). You need this to save and share your report.</div>
+    </div>
+  </div>
+  <div class="checkpoint">
+    <h5>✅ Checkpoint</h5>
+    <ul>
+      <li>Power BI Desktop is open and showing a blank canvas</li>
+      <li>You're signed in (your name shows in the top-right corner)</li>
+      <li>You have the file <code style="font-family:monospace">telecom_clean_powerbi.csv</code> on your Desktop</li>
+    </ul>
+  </div>
+</div>
+
+<!-- STEP 1: IMPORT -->
+<div class="step-section" id="import">
+  <div class="step-header">
+    <div class="step-num">1</div>
+    <div><div class="step-title">Import the Clean CSV File</div>
+    <div class="step-subtitle">Load telecom_clean_powerbi.csv with correct settings</div></div>
+  </div>
+  <div class="card">
+    <h4>Exact click sequence</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">In the top ribbon, click the tab <strong>"Home"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Click the button <strong>"Get data"</strong> (left side of ribbon, has a database icon)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">In the dropdown that appears, select <strong>"Text/CSV"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Browse to your Desktop, select <strong>telecom_clean_powerbi.csv</strong>, click <kbd>Open</kbd></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">A preview window opens. Verify: <strong>Delimiter = Comma</strong>, <strong>First Row as Headers = checked</strong>. You should see column names like "Customer ID", "Gender", "Age"...</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">6</div>
+      <div class="click-text">Click <strong>"Transform Data"</strong> (NOT "Load" — we need to fix data types first)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">7</div>
+      <div class="click-text">This opens <strong>Power Query Editor</strong> — a separate data transformation window</div>
+    </div>
+  </div>
+  <div class="checkpoint">
+    <h5>✅ Checkpoint</h5>
+    <ul>
+      <li>Power Query Editor is open</li>
+      <li>Left panel shows "telecom_clean_powerbi" as a query</li>
+      <li>You can see 57 columns in the data preview (scroll right)</li>
+      <li>First row = column headers (Customer ID, Gender, Age...)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- STEP 2: DATA TYPES -->
+<div class="step-section" id="types">
+  <div class="step-header">
+    <div class="step-num">2</div>
+    <div><div class="step-title">Set Correct Column Data Types</div>
+    <div class="step-subtitle">This step prevents chart errors and ensures calculations work correctly</div></div>
+  </div>
+  <div class="card">
+    <h4>Why this matters</h4>
+    <p>Power BI auto-detects types, but sometimes gets it wrong. If "Age" is treated as Text instead of Number, you can't create an average. If "Churn_Probability" is Text, you can't create a gauge. Fix these now — it takes 2 minutes and saves hours of frustration.</p>
+  </div>
+  <div class="card">
+    <h4>In Power Query Editor — set each column type</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Click on the column header <strong>"Age"</strong> → in the ribbon, click <strong>"Data Type"</strong> dropdown → select <strong>"Whole Number"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Click column <strong>"Monthly Charge"</strong> → Data Type → <strong>"Decimal Number"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">Click column <strong>"Total Revenue"</strong> → Data Type → <strong>"Decimal Number"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Click column <strong>"Churn_Probability"</strong> → Data Type → <strong>"Decimal Number"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">Click column <strong>"Latitude"</strong> → Data Type → <strong>"Decimal Number"</strong>. Do same for <strong>"Longitude"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">6</div>
+      <div class="click-text">Click column <strong>"Zip Code"</strong> → Data Type → <strong>"Text"</strong> (ZIP codes should never be treated as numbers)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">7</div>
+      <div class="click-text">When prompted "Change column type?" → click <strong>"Replace current"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">8</div>
+      <div class="click-text">Click <strong>"Close & Apply"</strong> button (top-left of Power Query Editor ribbon)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">9</div>
+      <div class="click-text">Wait for the loading spinner to complete. You'll return to the main Power BI canvas.</div>
+    </div>
+  </div>
+  <div class="checkpoint">
+    <h5>✅ Checkpoint — Right-panel "Fields"</h5>
+    <ul>
+      <li>You see "telecom_clean_powerbi" table in the right-side <strong>Fields</strong> panel</li>
+      <li>Expand it — you see all 57 columns listed</li>
+      <li>Numeric columns show a <strong>Σ (sigma)</strong> icon next to them</li>
+      <li>Text columns show an <strong>ABC</strong> icon</li>
+      <li>Latitude/Longitude show a <strong>globe</strong> icon</li>
+    </ul>
+  </div>
+</div>
+
+<!-- STEP 3: DAX MEASURES -->
+<div class="step-section" id="dax">
+  <div class="step-header">
+    <div class="step-num">3</div>
+    <div><div class="step-title">Create DAX Measures</div>
+    <div class="step-subtitle">These are the calculated KPIs that power your KPI cards and visuals</div></div>
+  </div>
+  <div class="card">
+    <h4>How to create a measure (do this for EVERY measure below)</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">In the top ribbon, click the tab <strong>"Modeling"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Click <strong>"New Measure"</strong> button (has an fx icon)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">A formula bar appears at the top with "Measure = " pre-filled</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text"><strong>Delete "Measure ="</strong> and paste in the DAX formula from below</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">Press <kbd>Enter</kbd> to confirm. The measure appears in the Fields panel.</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">6</div>
+      <div class="click-text">Right-click the measure in Fields panel → <strong>"Rename"</strong> if you want a cleaner name</div>
+    </div>
+  </div>
+
+  <div class="dax-block">
+    <div class="dax-label">DAX MEASURE 1 — Total Churn Rate</div>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre>Churn Rate = 
+DIVIDE(
+    CALCULATE(COUNTROWS('telecom_clean_powerbi'), 'telecom_clean_powerbi'[Customer Status] = "Churned"),
+    CALCULATE(COUNTROWS('telecom_clean_powerbi'), 'telecom_clean_powerbi'[Customer Status] <> "Joined"),
+    0
+)</pre>
+  </div>
+
+  <div class="dax-block">
+    <div class="dax-label">DAX MEASURE 2 — Total Revenue Lost</div>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre>Revenue Lost = 
+CALCULATE(
+    SUM('telecom_clean_powerbi'[Total Revenue]),
+    'telecom_clean_powerbi'[Customer Status] = "Churned"
+)</pre>
+  </div>
+
+  <div class="dax-block">
+    <div class="dax-label">DAX MEASURE 3 — Churned Customer Count</div>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre>Churned Customers = 
+CALCULATE(
+    COUNTROWS('telecom_clean_powerbi'),
+    'telecom_clean_powerbi'[Customer Status] = "Churned"
+)</pre>
+  </div>
+
+  <div class="dax-block">
+    <div class="dax-label">DAX MEASURE 4 — Avg Monthly Charge (Churners)</div>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre>Avg Charge Churners = 
+CALCULATE(
+    AVERAGE('telecom_clean_powerbi'[Monthly Charge]),
+    'telecom_clean_powerbi'[Customer Status] = "Churned"
+)</pre>
+  </div>
+
+  <div class="dax-block">
+    <div class="dax-label">DAX MEASURE 5 — Critical Risk Count</div>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre>Critical Risk Count = 
+CALCULATE(
+    COUNTROWS('telecom_clean_powerbi'),
+    'telecom_clean_powerbi'[Churn_Risk_Tier] = "Critical Risk"
+)</pre>
+  </div>
+
+  <div class="dax-block">
+    <div class="dax-label">DAX MEASURE 6 — Estimated Annual Revenue at Risk</div>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre>Annual Revenue at Risk = 
+CALCULATE(
+    SUMX(
+        FILTER('telecom_clean_powerbi', 'telecom_clean_powerbi'[Churn_Risk_Tier] = "Critical Risk"),
+        'telecom_clean_powerbi'[Monthly Charge] * 12
+    )
+)</pre>
+  </div>
+
+  <div class="dax-block">
+    <div class="dax-label">DAX MEASURE 7 — Net Retention Rate</div>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre>Retention Rate = 
+1 - [Churn Rate]</pre>
+  </div>
+
+  <div class="checkpoint">
+    <h5>✅ Checkpoint — Fields Panel</h5>
+    <ul>
+      <li>All 7 measures appear in the Fields panel under "telecom_clean_powerbi"</li>
+      <li>Measures have a <strong>calculator icon (fx)</strong> next to them — this is different from regular columns</li>
+      <li>No error messages in the formula bar when you click each measure</li>
+    </ul>
+  </div>
+</div>
+
+<!-- STEP 4: PAGE 1 -->
+<div class="step-section" id="page1">
+  <div class="step-header">
+    <div class="step-num">4</div>
+    <div><div class="step-title">Page 1 — Executive KPI Dashboard</div>
+    <div class="step-subtitle">The landing page your boss sees first — bold numbers, instant impact</div></div>
+  </div>
+  <div class="card">
+    <h4>Page setup</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">At the bottom of the screen, <strong>double-click "Page 1"</strong> → rename it to <strong>"Executive Overview"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Right-click in the blank canvas → <strong>"Format Page"</strong> → in the right panel, set <strong>Canvas background</strong> → Color: <code>#1B2A4A</code> (dark navy) → Transparency: 0%</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">In <strong>Format Page</strong> panel → <strong>Page size</strong> → Type: <strong>16:9</strong></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Add Title Text Box</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Click tab <strong>"Insert"</strong> in the top ribbon</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Click <strong>"Text box"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">Draw it across the top of the page (wide, about 1/6 of the height)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Type: <strong>TELECALIFORNIA — CHURN INTELLIGENCE DASHBOARD</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">Select the text → Font: <strong>Segoe UI Bold</strong> → Size: <strong>22</strong> → Color: <strong>White</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">6</div>
+      <div class="click-text">In the Format panel (right side, paint roller icon): Background = <code>#E8854A</code> (orange)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Add KPI Cards — Churn Rate</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Click tab <strong>"Visualizations"</strong> panel (right side)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Click the <strong>Card visual</strong> icon (looks like a small rectangle with a big number)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">A blank card appears on canvas. Drag it to position: top-left below the title</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">In Fields panel on right, drag <strong>"Churn Rate"</strong> measure to the card's <strong>"Fields"</strong> well (in Visualizations panel)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">Click the <strong>Format visual</strong> tab (paint roller icon) → <strong>Callout value</strong> → Font size: <strong>36</strong> → Color: <strong>White</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">6</div>
+      <div class="click-text"><strong>Category label</strong> → ON → Text: "CHURN RATE" → Color: <code>#E8854A</code> → Font: Segoe UI Bold, size 11</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">7</div>
+      <div class="click-text">Card background: <code>#243352</code> → Border: ON → Color: <code>#E8854A</code> → Width: 1px</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">8</div>
+      <div class="click-text">In <strong>Data format</strong>: set to <strong>Percentage</strong> with 1 decimal place</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">9</div>
+      <div class="click-text">Copy-paste this card 4 more times (<kbd>Ctrl+C</kbd> then <kbd>Ctrl+V</kbd>). Arrange them in a row.</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">10</div>
+      <div class="click-text">For each copy, change the measure: Card 2 → <strong>Revenue Lost</strong> | Card 3 → <strong>Churned Customers</strong> | Card 4 → <strong>Critical Risk Count</strong> | Card 5 → <strong>Retention Rate</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">11</div>
+      <div class="click-text">For "Revenue Lost" card → in Data Format → change to <strong>Currency ($)</strong> with 0 decimal places</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Add Bar Chart — Churn by Contract Type</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">In Visualizations panel → click the <strong>Clustered Bar Chart</strong> icon (horizontal bars)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Draw it in the bottom-left of the canvas (about 1/3 of canvas width)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">In the <strong>Build visual</strong> panel: drag <code>Contract</code> to <strong>Y-axis</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Drag the measure <strong>"Churn Rate"</strong> to <strong>X-axis</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">In Format visual: <strong>Data colors</strong> → set all bars to <code>#E8854A</code></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">6</div>
+      <div class="click-text"><strong>Title</strong> → text: "Churn Rate by Contract" → color: White → Background off</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">7</div>
+      <div class="click-text"><strong>Data labels</strong> → ON → Value format: Percentage 1 decimal → Color: White</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Add Donut Chart — Churn by Category</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">In Visualizations panel → click <strong>Donut Chart</strong> icon (circle with hole)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Draw it in the bottom-center of canvas</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">Drag <code>Churn Category</code> → <strong>Legend</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Drag <code>Churned Customers</code> measure → <strong>Values</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">Add a filter: in <strong>Filters on this visual</strong> panel → drag <code>Customer Status</code> → filter to <strong>Churned only</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">6</div>
+      <div class="click-text">Title: "Why They Left" | Background: <code>#243352</code></div>
+    </div>
+  </div>
+
+  <div class="visual-spec">
+    <h5>📐 Page 1 Layout Specification</h5>
+    <table class="spec-table">
+      <tr><th>Visual</th><th>Position</th><th>Size (approx)</th></tr>
+      <tr><td>Title Text Box</td><td>Top, full width</td><td>Full width × 10% height</td></tr>
+      <tr><td>5 KPI Cards (row)</td><td>Top, below title</td><td>Each ~18% width × 20% height</td></tr>
+      <tr><td>Bar Chart (Contract)</td><td>Middle-left</td><td>35% width × 30% height</td></tr>
+      <tr><td>Donut (Churn Category)</td><td>Middle-center</td><td>30% width × 30% height</td></tr>
+      <tr><td>Line Chart (Tenure trend)</td><td>Middle-right</td><td>30% width × 30% height</td></tr>
+      <tr><td>Slicer (Contract type)</td><td>Bottom-left</td><td>25% width × 15% height</td></tr>
+    </table>
+  </div>
+
+  <div class="checkpoint">
+    <h5>✅ Checkpoint — Page 1</h5>
+    <ul>
+      <li>Dark navy background covering full page</li>
+      <li>Orange title bar across the top</li>
+      <li>5 KPI cards showing: 26.5%, $3.68M, 1869, 1511, 73.5%</li>
+      <li>Bar chart shows Month-to-Month at ~51.7%, One Year at ~10.9%, Two Year at ~2.6%</li>
+      <li>Donut shows Competitor (45%), Dissatisfaction (17%), Attitude (17%), Price (11%), Other (10%)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- STEP 5: PAGE 2 -->
+<div class="step-section" id="page2">
+  <div class="step-header">
+    <div class="step-num">5</div>
+    <div><div class="step-title">Page 2 — Churn Analysis Deep Dive</div>
+    <div class="step-subtitle">Interactive filters, tenure lifecycle, internet type breakdown</div></div>
+  </div>
+  <div class="card">
+    <h4>Page setup + slicers</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Right-click bottom tab → <strong>"Add page"</strong> → rename to <strong>"Churn Analysis"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Set same canvas background: <code>#1B2A4A</code></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">In Visualizations panel → click <strong>Slicer</strong> icon (filter funnel with lines)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Draw a narrow vertical slicer on the LEFT side of the page</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">Drag <code>Contract</code> to the slicer's <strong>Field</strong> well</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">6</div>
+      <div class="click-text">Format: Slicer style → <strong>"Tile"</strong> → background <code>#243352</code></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">7</div>
+      <div class="click-text">Add a 2nd slicer below it → drag <code>Internet Type</code></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">8</div>
+      <div class="click-text">Add a 3rd slicer → drag <code>Tenure_Segment</code></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Tenure Lifecycle Chart (Area/Line Chart)</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Visualizations panel → click <strong>Area Chart</strong> icon</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Draw it in the top-right of the canvas (large, prominent)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">Drag <code>Tenure_Segment</code> → <strong>X-axis</strong> (ordered: 0-6M, 6-12M, 1-2Y, 2-4Y, 4-6Y)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Drag <strong>"Churn Rate"</strong> measure → <strong>Y-axis</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">Format: Line color = <code>#E8854A</code> | Shading opacity = 30% | Title: "Churn Rate by Tenure Lifecycle"</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">6</div>
+      <div class="click-text">Data labels ON → shows 77.2% for 0-6M, 35.3% for 6-12M...</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Matrix/Table — Churn by City + Offer</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Visualizations panel → click <strong>Matrix</strong> icon (grid of squares)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Draw it in the bottom-center of the page</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">Rows → drag <code>City</code> | Columns → drag <code>Contract</code> | Values → drag <strong>"Churn Rate"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Format → <strong>Cell elements</strong> → <strong>Background color</strong> → ON → Diverging color scale: green (low) → red (high)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">Add a Top N filter: In <strong>Filters</strong> panel → City → Filter type: <strong>Top N</strong> → Show top 15 → By value: <strong>Churned Customers</strong></div>
+    </div>
+  </div>
+
+  <div class="checkpoint">
+    <h5>✅ Checkpoint — Page 2</h5>
+    <ul>
+      <li>3 slicers on the left — clicking "Month-to-Month" updates all charts</li>
+      <li>Area chart shows dramatic drop from 77% (0-6M) to 9.5% (4-6Y)</li>
+      <li>Matrix shows San Diego and Los Angeles as top churning cities</li>
+      <li>All visuals respond to slicer selections (interactive cross-filtering)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- STEP 6: PAGE 3 ML RISK -->
+<div class="step-section" id="page3">
+  <div class="step-header">
+    <div class="step-num">6</div>
+    <div><div class="step-title">Page 3 — ML Risk Map & Prediction</div>
+    <div class="step-subtitle">The WOW page — scatter plot by churn probability, map view, risk tiers</div></div>
+  </div>
+  <div class="card">
+    <h4>Scatter Plot — Monthly Charge vs Churn Probability</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Add new page → rename: <strong>"ML Risk Intelligence"</strong> → dark navy background</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Visualizations → click <strong>Scatter Chart</strong> icon (dots on axes)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">X-axis → <code>Monthly Charge</code> | Y-axis → <code>Churn_Probability</code></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Values → <code>Customer ID</code> (each dot = one customer)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">Legend → <code>Churn_Risk_Tier</code> (colors the dots by risk level)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">6</div>
+      <div class="click-text">Format: set colors: Critical Risk = <code>#C0392B</code> (red) | High Risk = <code>#E67E22</code> | Medium = <code>#F39C12</code> | Low = <code>#27AE60</code></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">7</div>
+      <div class="click-text">Add <strong>Analytics</strong> line: click <strong>Analytics</strong> tab (funnel icon) → <strong>Constant Line</strong> → Value: 0.6 → Label: "High Risk Threshold"</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">8</div>
+      <div class="click-text">Title: "Customer Risk Map: Charge vs. Churn Probability" | color: White</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Map Visual — Geographic Churn Risk</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Visualizations → click <strong>Map</strong> visual (blue globe icon)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Latitude → <code>Latitude</code> | Longitude → <code>Longitude</code></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">Size → <code>Monthly Charge</code> (bubble size = revenue importance)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Color saturation → <code>Churn_Probability</code> (darker = higher risk)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">Add a slicer above it → <code>Churn_Risk_Tier</code> → style: Dropdown</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">6</div>
+      <div class="click-text">Select "Critical Risk" in the slicer → map shows only highest-risk customers</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Bar Chart — Top 10 Features Driving Churn</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Insert → <strong>Text box</strong> → type the feature importance data manually (from your ML report)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Alternatively: Insert → <strong>Image</strong> → use a pre-made feature importance chart image</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">Add 4 KPI cards at the top: Critical Risk Count | High Risk Count | Avg Churn Probability | Annual Revenue at Risk</div>
+    </div>
+  </div>
+
+  <div class="checkpoint">
+    <h5>✅ Checkpoint — Page 3</h5>
+    <ul>
+      <li>Scatter plot shows 7,043 dots colored by risk tier</li>
+      <li>Red dots (Critical Risk) cluster at HIGH Churn_Probability (top of chart)</li>
+      <li>Orange horizontal line at 0.6 probability threshold visible</li>
+      <li>Map shows California with color-coded risk bubbles</li>
+      <li>Clicking a city on the map filters the scatter chart</li>
+    </ul>
+  </div>
+</div>
+
+<!-- STEP 7: WATERFALL -->
+<div class="step-section" id="page4">
+  <div class="step-header">
+    <div class="step-num">7</div>
+    <div><div class="step-title">Page 4 — Revenue Waterfall</div>
+    <div class="step-subtitle">Show the boss exactly where $21.4M comes from and where it's going</div></div>
+  </div>
+
+  <div class="card">
+    <h4>Waterfall Chart — Revenue by Customer Status</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Add new page → rename: <strong>"Revenue Impact"</strong> → dark navy background</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Visualizations → click <strong>Waterfall Chart</strong> icon (looks like stacked bars going up and down)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">Category → <code>Customer Status</code></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Y-axis → <code>Total Revenue</code></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">Breakdown → <code>Churn Category</code> (this shows what % of churn = competitor vs price)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">6</div>
+      <div class="click-text">Format → Sentiment colors: Increase = <code>#27AE60</code> (green) | Decrease = <code>#C0392B</code> (red) | Total = <code>#E8854A</code> (orange)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">7</div>
+      <div class="click-text">Data labels → ON → font color: White | format: Currency $#,##0</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">8</div>
+      <div class="click-text">Title: "Revenue Bridge: Total → Active → Lost" | color: White</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Treemap — Revenue by Churn Reason</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Visualizations → click <strong>Treemap</strong> icon (nested rectangles)</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Category → <code>Churn Reason</code></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">Values → <strong>"Revenue Lost"</strong> measure</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Add filter: <code>Customer Status = Churned</code></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">Title: "Revenue Lost by Specific Churn Reason"</div>
+    </div>
+  </div>
+
+  <div class="checkpoint">
+    <h5>✅ Checkpoint — Page 4</h5>
+    <ul>
+      <li>Waterfall chart: tall green bar (Stayed: $17.6M), then red bar (Churned: -$3.7M), orange total</li>
+      <li>Treemap: "Competitor had better devices" = largest tile, "Competitor made better offer" = 2nd largest</li>
+      <li>Clicking "Competitor" in treemap highlights waterfall</li>
+    </ul>
+  </div>
+</div>
+
+<!-- STEP 8: SIMULATOR -->
+<div class="step-section" id="simulator">
+  <div class="step-header">
+    <div class="step-num">8</div>
+    <div><div class="step-title">Simulator Tab — "What If" Churn Reduction</div>
+    <div class="step-subtitle">The most impressive tab — let your boss play with retention scenarios</div></div>
+  </div>
+
+  <div class="card">
+    <h4>Create a What-If Parameter</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Add new page → rename: <strong>"Retention Simulator"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">In the top ribbon → click tab <strong>"Modeling"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">Click <strong>"New Parameter"</strong> button → select <strong>"Numeric range"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Name: <strong>"Churn Reduction %"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">Minimum: <strong>0</strong> | Maximum: <strong>15</strong> | Increment: <strong>1</strong> | Default: <strong>5</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">6</div>
+      <div class="click-text">Check <strong>"Add slicer to page"</strong> → click <strong>Create</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">7</div>
+      <div class="click-text">A slider slicer appears on the page. Move it and watch the measures update!</div>
+    </div>
+  </div>
+
+  <div class="dax-block">
+    <div class="dax-label">DAX — Simulated Revenue Saved</div>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre>Simulated Revenue Saved = 
+VAR ChurnReduction = 'Churn Reduction %'[Churn Reduction % Value] / 100
+VAR BaseChurners = [Churned Customers]
+VAR RetainedCustomers = ROUND(BaseChurners * ChurnReduction, 0)
+VAR AvgMonthlyCharge = [Avg Charge Churners]
+RETURN
+    RetainedCustomers * AvgMonthlyCharge * 12</pre>
+  </div>
+
+  <div class="dax-block">
+    <div class="dax-label">DAX — Simulated Customers Retained</div>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre>Simulated Retained = 
+ROUND([Churned Customers] * ('Churn Reduction %'[Churn Reduction % Value] / 100), 0)</pre>
+  </div>
+
+  <div class="dax-block">
+    <div class="dax-label">DAX — Net ROI (after program cost)</div>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    <pre>Simulated Net ROI = 
+[Simulated Revenue Saved] - 150000</pre>
+  </div>
+
+  <div class="card">
+    <h4>Add Results Cards</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Add 3 large KPI cards: <strong>Simulated Revenue Saved</strong> | <strong>Simulated Retained</strong> | <strong>Simulated Net ROI</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Add a text box with instructions: "Move the slider to simulate churn reduction scenarios. The cards update in real time."</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">Format cards: large font (40px), orange accent bars at top, dark navy background</div>
+    </div>
+  </div>
+
+  <div class="result-box">
+    <h5>✅ When slider = 5 (5% churn reduction), you should see:</h5>
+    <ul>
+      <li>Simulated Retained: ~93 customers</li>
+      <li>Simulated Revenue Saved: ~$82,000/year</li>
+      <li>Net ROI: ~−$68,000 (program needs to retain 200+ to break even)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- STEP 9: PUBLISH -->
+<div class="step-section" id="theme">
+  <div class="step-header">
+    <div class="step-num">9</div>
+    <div><div class="step-title">Apply Theme, Final Polish & Publish</div>
+    <div class="step-subtitle">Make it look professional before sharing</div></div>
+  </div>
+
+  <div class="card">
+    <h4>Apply consistent theme</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Click <strong>"View"</strong> tab in top ribbon</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Click <strong>"Themes"</strong> dropdown → select <strong>"Dark"</strong> as base theme</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">Click <strong>"Customize current theme"</strong> → set Name: "TeleCalifornia" → primary color: <code>#E8854A</code></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Click <strong>"Apply"</strong></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Save the file</h4>
+    <div class="click-step">
+      <div class="click-num">1</div>
+      <div class="click-text">Press <kbd>Ctrl+S</kbd> → save as <strong>TeleCalifornia_Churn_Dashboard.pbix</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">2</div>
+      <div class="click-text">Click <strong>"File"</strong> → <strong>"Publish"</strong> → <strong>"Publish to Power BI"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">3</div>
+      <div class="click-text">Choose workspace: <strong>"My workspace"</strong> → click <strong>"Select"</strong></div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">4</div>
+      <div class="click-text">Wait for "Publishing succeeded" → click the link to open in browser</div>
+    </div>
+    <div class="click-step">
+      <div class="click-num">5</div>
+      <div class="click-text">In Power BI web: click <strong>"Share"</strong> → enter your boss's email or copy the link</div>
+    </div>
+  </div>
+
+  <div class="result-box">
+    <h5>🎉 Dashboard complete!</h5>
+    <ul>
+      <li>Page 1: Executive KPIs — instant business impact</li>
+      <li>Page 2: Churn Analysis — deep dive with interactive filters</li>
+      <li>Page 3: ML Risk Map — WOW factor, predictive intelligence</li>
+      <li>Page 4: Revenue Waterfall — financial storytelling</li>
+      <li>Simulator: Strategic scenario planning — live ROI calculator</li>
+    </ul>
+  </div>
+</div>
+
+</div>
+<footer>Built by <span>Ying Zhao</span> · Power BI Tutorial · TeleCalifornia Churn Dashboard · 2024</footer>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.nextElementSibling;
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
