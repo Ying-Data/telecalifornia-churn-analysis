@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 📊 TeleCalifornia — Customer Churn Intelligence
 
 > **28.4% of customers are leaving — and they're the highest-paying ones.**  
