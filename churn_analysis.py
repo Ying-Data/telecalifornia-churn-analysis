@@ -1,5 +1,5 @@
 """
-TeleCalifornia — Customer Churn Analysis Pipeline
+TeleCalifornia: Customer Churn Analysis Pipeline
 ==================================================
 Author  : Ying Zhao
 Email   : weiying.data@gmail.com
@@ -46,7 +46,7 @@ from sklearn.preprocessing import LabelEncoder
 # 1. LOAD DATA
 # ==============================================================
 print("=" * 60)
-print("TELECALIFORNIA — CHURN ANALYSIS PIPELINE")
+print("TELECALIFORNIA: CHURN ANALYSIS PIPELINE")
 print("=" * 60)
 
 print("\n[1/7] Loading data...")
@@ -56,9 +56,9 @@ df = pd.read_csv("telecom_customer_churn.csv", encoding="latin1")
 pop = pd.read_csv("telecom_zipcode_population.csv", encoding="latin1")
 dd  = pd.read_csv("telecom_data_dictionary.csv",  encoding="latin1")
 
-print(f"  ✓ Customer data:    {df.shape[0]:,} rows × {df.shape[1]} columns")
-print(f"  ✓ Population data:  {pop.shape[0]:,} ZIP codes")
-print(f"  ✓ Data dictionary:  {dd.shape[0]} field definitions")
+print(f"  - Customer data:    {df.shape[0]:,} rows × {df.shape[1]} columns")
+print(f"  - Population data:  {pop.shape[0]:,} ZIP codes")
+print(f"  - Data dictionary:  {dd.shape[0]} field definitions")
 
 
 # ==============================================================
@@ -96,7 +96,7 @@ missing = df.isnull().sum()
 missing = missing[missing > 0].sort_values(ascending=False)
 for col, n in missing.items():
     pct = n / total * 100
-    print(f"    {col:<40} {n:>5} ({pct:.1f}%) — business logic null")
+    print(f"    {col:<40} {n:>5} ({pct:.1f}%), business-logic null")
 
 # --- Churn by key segments ---
 # Only look at active-base (Stayed + Churned, exclude Joined)
@@ -149,13 +149,13 @@ df = df.merge(
     how="left"
 )
 matched = df["Population"].notna().sum()
-print(f"  ✓ ZIP-population join: {matched:,}/{total:,} matched ({matched/total*100:.1f}%)")
+print(f"  - ZIP-population join: {matched:,}/{total:,} matched ({matched/total*100:.1f}%)")
 
-# --- Fix negative Monthly Charge (billing credits → clip to 0) ---
+# --- Fix negative Monthly Charge (billing credits, clipped to 0) ---
 neg_charges = (df["Monthly Charge"] < 0).sum()
 df["Has_Credit_Adjustment"] = (df["Monthly Charge"] < 0).astype(int)
 df["Monthly Charge"] = df["Monthly Charge"].clip(lower=0)
-print(f"  ✓ Clipped {neg_charges} negative monthly charges to 0 (billing credits flagged)")
+print(f"  - Clipped {neg_charges} negative monthly charges to 0 (billing credits flagged)")
 
 # --- Binary churn flag ---
 df["Is_Churned"] = (df["Customer Status"] == "Churned").astype(int)
@@ -183,16 +183,16 @@ for col in churn_cols:
     if col in df.columns:
         df[col] = df[col].fillna("Not Churned")
 
-print(f"  ✓ Business-logic nulls filled for internet/phone/churn columns")
+print(f"  - Business-logic nulls filled for internet/phone/churn columns")
 
-# --- Remaining numeric nulls → median ---
+# --- Remaining numeric nulls, fill with median ---
 numeric_cols = df.select_dtypes(include=[np.number]).columns
 remaining_nulls = df[numeric_cols].isnull().sum().sum()
 if remaining_nulls > 0:
     df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].median())
-    print(f"  ✓ {remaining_nulls} remaining numeric nulls filled with column median")
+    print(f"  - {remaining_nulls} remaining numeric nulls filled with column median")
 
-print(f"  ✓ Cleaning complete. Final null count: {df.isnull().sum().sum()}")
+print(f"  - Cleaning complete. Final null count: {df.isnull().sum().sum()}")
 
 
 # ==============================================================
@@ -307,18 +307,18 @@ features_added = [
     "Service_Bundle_Score", "Streaming_Count", "Contract_Risk",
     "Is_High_Value", "Is_Loyal_Referrer", "Is_Fiber", "Is_Digital_Native", "Est_CLTV"
 ]
-print(f"  ✓ {len(features_added)} new features engineered:")
+print(f"  - {len(features_added)} engineered columns:")
 for f in features_added:
     print(f"      + {f}")
 
 
 # ==============================================================
-# 5. MACHINE LEARNING — RANDOM FOREST
+# 5. MACHINE LEARNING: RANDOM FOREST
 # ==============================================================
 print("\n[5/7] Training Random Forest model...")
 
 # --- Build feature matrix ---
-# Use Stayed + Churned only (exclude Joined — they haven't had a chance to churn)
+# Use Stayed + Churned only (exclude Joined, they have not had a chance to churn)
 ml_df = df[df["Customer Status"] != "Joined"].copy()
 
 # Select numeric and encoded categorical features
@@ -413,7 +413,7 @@ for feat, imp in importance.head(10).items():
 # ==============================================================
 print("\n[6/7] Scoring all customers and assigning risk tiers...")
 
-# Score all 7,043 customers (including Joined — for early warning)
+# Score all 7,043 customers (including Joined, for early warning)
 X_all = df[all_features].fillna(0)
 df["Churn_Probability"] = rf.predict_proba(X_all)[:, 1]
 
@@ -467,57 +467,58 @@ print("\n[7/7] Exporting clean dataset...")
 output_path = "telecom_clean_powerbi.csv"
 df.to_csv(output_path, index=False, encoding="utf-8")
 
-print(f"  ✓ Saved: {output_path}")
-print(f"  ✓ Shape: {df.shape[0]:,} rows × {df.shape[1]} columns")
+print(f"  - Saved: {output_path}")
+print(f"  - Shape: {df.shape[0]:,} rows × {df.shape[1]} columns")
 
 # List all columns
 print(f"\n  Columns in output file ({df.shape[1]} total):")
 original_count = len(pd.read_csv("telecom_customer_churn.csv", encoding="latin1", nrows=0).columns)
 print(f"    Original columns:    {original_count}")
-print(f"    Engineered features: {df.shape[1] - original_count - 1} (+ Population from join)")
+print(f"    Population (joined): 1")
+print(f"    Engineered columns:  {df.shape[1] - original_count - 1 - 2}")
 print(f"    ML outputs:          2 (Churn_Probability, Churn_Risk_Tier)")
 
 # ==============================================================
 # FINAL SUMMARY
 # ==============================================================
 print("\n" + "=" * 60)
-print("ANALYSIS COMPLETE — KEY FINDINGS SUMMARY")
+print("ANALYSIS COMPLETE: KEY FINDINGS SUMMARY")
 print("=" * 60)
 
 churn_rate = churned_n / (churned_n + stayed_n) * 100
 annual_loss = churned_rev / df.loc[df["Customer Status"] == "Churned", "Tenure in Months"].mean() * 12
 
 print(f"""
-  📊 Data
-     · 7,043 customers across 3 merged datasets
-     · 15 engineered features created
-     · 0 unexplained missing values
+  DATA
+     - 7,043 customers across 3 merged datasets
+     - 16 engineered columns created
+     - 0 unexplained missing values
 
-  📈 Business Findings
-     · Churn rate:          {churn_rate:.1f}%  (industry avg ~20%)
-     · Revenue lost:        ${churned_rev:,.0f}
-     · Est. annual loss:    ~${annual_loss:,.0f}
-     · Avg charge churners: ${avg_charge_churned:.2f}/mo  (vs ${avg_charge_all:.2f} overall)
-     · Worst contract:      Month-to-Month at ~51.7% churn
-     · Danger zone:         0-6 months tenure (77.2% churn rate)
-     · Worst offer:         Offer E — 67.6% churn
+  BUSINESS FINDINGS
+     - Churn rate:          {churn_rate:.1f}%  (industry average is roughly 20%)
+     - Revenue lost:        ${churned_rev:,.0f}
+     - Est. annual loss:    ~${annual_loss:,.0f}
+     - Avg charge churners: ${avg_charge_churned:.2f}/mo  (vs ${avg_charge_all:.2f} overall)
+     - Worst contract:      Month-to-Month at ~51.7% churn
+     - Danger zone:         0 to 6 months tenure (77.2% churn rate)
+     - Worst offer:         Offer E at 67.6% churn
 
-  🤖 ML Model (Random Forest)
-     · AUC-ROC:     {auc:.4f}
-     · 5-Fold CV:   {cv_scores.mean():.4f} ± {cv_scores.std():.4f}
-     · Accuracy:    {acc*100:.1f}%
-     · F1 (churn):  {f1:.2f}
+  ML MODEL (Random Forest)
+     - AUC-ROC:     {auc:.4f}
+     - 5-Fold CV:   {cv_scores.mean():.4f} +/- {cv_scores.std():.4f}
+     - Accuracy:    {acc*100:.1f}%
+     - F1 (churn):  {f1:.2f}
 
-  🎯 Risk Tiers
-     · Critical Risk: {tier_counts.get('Critical Risk', 0):,} customers
-     · High Risk:     {tier_counts.get('High Risk', 0):,} customers
-     · Medium Risk:   {tier_counts.get('Medium Risk', 0):,} customers
-     · Low Risk:      {tier_counts.get('Low Risk', 0):,} customers
+  RISK TIERS
+     - Critical Risk: {tier_counts.get('Critical Risk', 0):,} customers
+     - High Risk:     {tier_counts.get('High Risk', 0):,} customers
+     - Medium Risk:   {tier_counts.get('Medium Risk', 0):,} customers
+     - Low Risk:      {tier_counts.get('Low Risk', 0):,} customers
 
-  📁 Output
-     · telecom_clean_powerbi.csv  ← import this into Power BI
+  OUTPUT
+     - telecom_clean_powerbi.csv  (import this into Power BI)
 
-  💡 Top Recommendation
-     Contact top 200 Critical Risk customers immediately.
+  TOP RECOMMENDATION
+     Contact the top 200 Critical Risk customers first.
      Estimated annual revenue at stake: ~$1.76M.
 """)

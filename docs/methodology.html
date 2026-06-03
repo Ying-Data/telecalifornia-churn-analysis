@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TeleCalifornia Churn Analysis: Methodology and How to Explore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5efe6; --card:#ffffff; --border:#e0d5c5;
+    --text:#4a4038; --dim:#8a7e6f; --heading:#2a2218;
+    --accent:#e8854a; --accent-d:#c96e35;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);
+       line-height:1.65;font-size:16px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:56px 24px 72px}
+  header{border-bottom:2px solid var(--accent);padding-bottom:22px;margin-bottom:32px}
+  .eyebrow{font-size:12px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent-d);margin-bottom:10px}
+  h1{font-family:'Playfair Display',serif;font-size:34px;line-height:1.15;color:var(--heading);font-weight:700;margin-bottom:8px}
+  .lede{font-size:17px;color:var(--dim)}
+  h2{font-family:'Playfair Display',serif;font-size:22px;color:var(--heading);font-weight:600;margin:38px 0 12px}
+  h3{font-size:14px;font-weight:600;color:var(--heading);margin:18px 0 6px}
+  p{margin-bottom:12px}
+  ul{margin:0 0 12px 20px}
+  li{margin-bottom:6px}
+  a{color:var(--accent-d);text-decoration:none;border-bottom:1px solid var(--border)}
+  a:hover{border-color:var(--accent-d)}
+  code{font-family:ui-monospace,'Cascadia Code',Consolas,monospace;background:#f0e8db;
+       padding:2px 6px;border-radius:4px;font-size:13.5px;color:var(--accent-d)}
+  pre{background:var(--heading);color:#f5efe6;padding:16px 18px;border-radius:10px;overflow-x:auto;margin:0 0 14px}
+  pre code{background:none;color:inherit;padding:0;font-size:13px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:16px}
+  table{width:100%;border-collapse:collapse;margin:8px 0 16px;font-size:14.5px}
+  th{text-align:left;background:var(--heading);color:#f5efe6;padding:9px 12px;font-weight:600}
+  td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+  .note{border-left:3px solid var(--accent);background:#faf5ec;padding:12px 16px;border-radius:0 8px 8px 0;font-size:14.5px}
+  footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--border);font-size:14px;color:var(--dim)}
+  footer a{border:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">TeleCalifornia Churn Analysis</div>
+    <h1>Methodology and How to Explore</h1>
+    <p class="lede">A one-page reference to how this analysis was built, the choices behind it, and how to reproduce or explore it in five minutes.</p>
+  </header>
+
+  <h2>What this project answers</h2>
+  <p>TeleCalifornia, a California telecom serving 7,043 customers, loses its highest-paying customers to churn. This project quantifies the loss, predicts who will leave next, and prices a retention response. Four questions drive it: what is the exact churn rate and revenue impact, which segments are most at risk and why, can churn be predicted before it happens, and which retention actions pay back fastest.</p>
+
+  <h2>Data and cleaning</h2>
+  <p>Three Maven Analytics files are merged: customer records, ZIP-code population, and a data dictionary. The cleaning is intentionally conservative, with each null treated by business logic rather than blanket imputation.</p>
+  <table>
+    <tr><th>Decision</th><th>Treatment</th><th>Why</th></tr>
+    <tr><td>Service fields blank for no-internet customers</td><td>Filled as "No Internet Service"</td><td>The blank is a real category, not a missing value</td></tr>
+    <tr><td>120 negative monthly charges</td><td>Clipped to 0, flagged separately</td><td>Billing credits, not service revenue</td></tr>
+    <tr><td>ZIP-to-population join</td><td>100% match on 7,043 records</td><td>No rows dropped for geography</td></tr>
+    <tr><td>Customers with status "Joined"</td><td>Excluded from the model</td><td>They have not yet had a chance to churn</td></tr>
+  </table>
+
+  <h2>Feature engineering</h2>
+  <p>Sixteen columns are engineered from the raw data, including a contract-risk score, tenure and age segments, a service-bundle score, an estimated customer lifetime value, and a binary churn target. The full, commented logic lives in <code>churn_analysis.py</code>.</p>
+
+  <h2>Model</h2>
+  <p>A Random Forest classifier (200 trees, balanced class weights) predicts individual churn probability. It is evaluated on a stratified 80/20 split and a 5-fold cross-validation.</p>
+  <ul>
+    <li>AUC-ROC: 0.9251 (5-fold CV: 0.9281 +/- 0.005)</li>
+    <li>Accuracy 85.1%, precision 73%, recall 76% on the churn class</li>
+    <li>Top drivers: contract risk, contract type, tenure, referrals</li>
+  </ul>
+  <div class="note"><strong>Feature integrity:</strong> a few monetary fields (Total Revenue, estimated CLTV) are correlated with tenure and therefore partly endogenous to the outcome, so the headline AUC is read conservatively. A production model would exclude any field generated after the churn decision and be validated on a forward time split rather than a random one.</div>
+
+  <h2>Reproduce it</h2>
+  <pre><code>git clone https://github.com/Ying-Data/telecalifornia-churn-analysis.git
+cd telecalifornia-churn-analysis
+pip install -r requirements.txt
+# place the raw Kaggle CSVs in data/, then:
+python churn_analysis.py</code></pre>
+  <p>The script prints the full findings to the console and writes <code>data/telecom_clean_powerbi.csv</code> (57 columns) for the dashboard.</p>
+
+  <h2>Explore the dashboard</h2>
+  <ol style="margin:0 0 12px 20px">
+    <li style="margin-bottom:6px">Download <code>output/TeleCalifornia_Churn_Dashboard.pbix</code>.</li>
+    <li style="margin-bottom:6px">Open it in the free Power BI Desktop.</li>
+    <li style="margin-bottom:6px">Under Transform Data, point the source to your local copy of the CSV.</li>
+  </ol>
+  <p>Five pages cover the executive overview, a churn deep dive, ML risk intelligence, revenue impact, and a live retention simulator. For the printable narrative, open <code>output/TeleCalifornia_Report_A4_v2.html</code> in a browser and print to A4 with margins set to None.</p>
+
+  <footer>
+    <strong style="color:var(--heading)">Ying Zhao</strong>, Data Analyst, Antwerp, Belgium<br>
+    <a href="https://linkedin.com/in/weiying-zhao">linkedin.com/in/weiying-zhao</a> &middot;
+    <a href="mailto:weiying.data@gmail.com">weiying.data@gmail.com</a> &middot;
+    <a href="https://github.com/Ying-Data">github.com/Ying-Data</a>
+  </footer>
+
+</div>
+</body>
+</html>
