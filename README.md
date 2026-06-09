@@ -9,7 +9,7 @@
 
 ## Business problem
 
-TeleCalifornia, a California telecom serving 7,043 customers, is losing **$3.68M** in total revenue to churn. The customers who leave pay **$73.43/month**, 15% more than those who stay. Four questions drive the analysis:
+TeleCalifornia, a California telecom serving 7,043 customers, is losing **$3.68M** in total revenue to churn. The customers who leave pay **$73.43/month**, 15% more than the average customer ($63.69). Four questions drive the analysis:
 
 1. What is the exact churn rate and revenue impact?
 2. Which customer segments are most at risk, and why?
@@ -26,6 +26,8 @@ TeleCalifornia, a California telecom serving 7,043 customers, is losing **$3.68M
 | New-customer churn (0 to 6 months) | **77.2%**, the critical danger zone |
 | ML model AUC | **0.9251** (5-fold CV: 0.9281 +/- 0.005) |
 | Critical-risk customers flagged | **1,511** |
+
+Churn rates are computed on the 6,589 customers who had a chance to churn (churned plus stayed). The 454 customers with status "Joined" are excluded from the rate because they are too new to have churned.
 
 ## Dataset
 
@@ -73,7 +75,7 @@ Five interactive Power BI pages. Download `output/TeleCalifornia_Churn_Dashboard
 5 KPI cards, churn by contract, churn-reasons donut, tenure trend, contract slicer.
 ![Executive Overview](visuals/dashboard_overview.png)
 
-### Page 2, Churn Analysis Deep Dive
+### Page 2, Churn Breakdown
 Lifecycle area chart, churn by internet type, top-cities heatmap, three slicers.
 ![Churn Analysis](visuals/dashboard_churn.png)
 

@@ -233,7 +233,7 @@ tbody td{padding:6pt 9pt;border-bottom:1px solid var(--border);vertical-align:to
       <div class="cover-title">TeleCalifornia<br>Churn Intelligence</div>
       <div class="cover-subtitle">End-to-End Predictive Analysis & Retention Strategy</div>
       <div class="cover-abstract">
-        TeleCalifornia is losing <strong>$1.65M annually</strong> to customer churn, and the customers who leave pay <strong>15% more</strong> than those who stay. This report identifies the root causes, predicts which customers will leave next (AUC 0.93), and delivers a data-driven retention playbook with ROI scenarios modelled directly from actual customer data.
+        TeleCalifornia is losing <strong>$1.65M annually</strong> to customer churn, and the customers who leave pay <strong>15% more</strong> than the average customer. This report identifies the root causes, predicts which customers will leave next (AUC 0.93), and delivers a data-driven retention playbook with ROI scenarios modelled directly from actual customer data.
       </div>
 
       <div class="kpi-strip">
@@ -334,7 +334,7 @@ tbody td{padding:6pt 9pt;border-bottom:1px solid var(--border);vertical-align:to
     </tr>
     <tr>
       <td class="wf-indent">Revenue from Stayed customers (4,720)</td>
-      <td class="wf-pos">$17,685,672</td>
+      <td class="wf-pos">$17,632,392</td>
     </tr>
     <tr>
       <td class="wf-indent" style="color:var(--red)">Revenue Lost to Churn (1,869 customers)</td>
@@ -342,11 +342,11 @@ tbody td{padding:6pt 9pt;border-bottom:1px solid var(--border);vertical-align:to
     </tr>
     <tr>
       <td class="wf-label" style="font-size:10.5pt;color:#6B7A8D">New Customer Revenue (454 joined)</td>
-      <td style="text-align:right;font-family:'DM Mono',monospace;color:#6B7A8D">$976,469 (partial-cycle)</td>
+      <td style="text-align:right;font-family:'DM Mono',monospace;color:#6B7A8D">$54,280 (partial-cycle)</td>
     </tr>
     <tr>
       <td class="wf-label" style="font-weight:700">Estimated Annual Revenue at Risk (current pace)</td>
-      <td class="wf-tot">$1,647,780 / yr</td>
+      <td class="wf-tot">$1,646,780 / yr</td>
     </tr>
   </table>
 
@@ -406,17 +406,17 @@ tbody td{padding:6pt 9pt;border-bottom:1px solid var(--border);vertical-align:to
       <th>Controllable?</th>
     </tr></thead>
     <tbody>
-      <tr><td>Competitor (better offer / device)</td><td class="td-val td-red">45.1%</td><td class="td-val">$1.66M</td><td>High: pricing and device programs</td></tr>
-      <tr><td>Customer Dissatisfaction</td><td class="td-val td-orange">16.7%</td><td class="td-val">$615K</td><td>High: service quality and NPS</td></tr>
-      <tr><td>Attitude / Poor Service</td><td class="td-val td-orange">16.2%</td><td class="td-val">$597K</td><td>High: staff training and CX</td></tr>
-      <tr><td>Price Sensitivity</td><td class="td-val">11.3%</td><td class="td-val">$416K</td><td>Partial: loyalty discounts</td></tr>
-      <tr><td>Other / Unknown</td><td class="td-val">10.7%</td><td class="td-val">$394K</td><td>Requires investigation</td></tr>
+      <tr><td>Competitor (better offer / device)</td><td class="td-val td-red">45.0%</td><td class="td-val">$1.69M</td><td>High: pricing and device programs</td></tr>
+      <tr><td>Customer Dissatisfaction</td><td class="td-val td-orange">17.2%</td><td class="td-val">$618K</td><td>High: service quality and NPS</td></tr>
+      <tr><td>Attitude / Poor Service</td><td class="td-val td-orange">16.8%</td><td class="td-val">$580K</td><td>High: staff training and CX</td></tr>
+      <tr><td>Price Sensitivity</td><td class="td-val">11.3%</td><td class="td-val">$438K</td><td>Partial: loyalty discounts</td></tr>
+      <tr><td>Other / Unknown</td><td class="td-val">9.7%</td><td class="td-val">$354K</td><td>Requires investigation</td></tr>
     </tbody>
   </table>
 
   <div class="callout red">
     <div class="callout-label">Critical Finding</div>
-    <p><strong>78% of churn is directly actionable</strong>: it stems from competitor pressure, service quality, and attitude issues, all of which are within management's control. Only 11% is price-driven.</p>
+    <p><strong>79% of churn is directly actionable</strong>: it stems from competitor pressure, service quality, and attitude issues, all of which are within management's control. Only 11% is price-driven.</p>
   </div>
 
   <div class="page-footer">
@@ -437,7 +437,7 @@ tbody td{padding:6pt 9pt;border-bottom:1px solid var(--border);vertical-align:to
     <div class="section-title">Predictive Model: Who Will Churn Next?</div>
   </div>
 
-  <p>A Random Forest classification model was trained on 5,589 customers (train/test split 80/20) with 5-fold cross-validation. The model predicts individual churn probability for all 7,043 customers, enabling proactive, not reactive, retention.</p>
+  <p>A Random Forest classification model was trained on 5,271 customers (an 80/20 split of the 6,589 who had a chance to churn) with 5-fold cross-validation. The model then scores all 7,043 customers, enabling proactive, not reactive, retention.</p>
 
   <div class="col2">
     <div>
@@ -466,7 +466,7 @@ tbody td{padding:6pt 9pt;border-bottom:1px solid var(--border);vertical-align:to
       </table>
       <div class="callout teal" style="margin-top:8pt">
         <div class="callout-label">Business Interpretation</div>
-        <p style="font-size:10.5pt">The model correctly identifies <strong>285 of 374 actual churners</strong>. The 89 missed (FN) represent $784K in annual revenue, acceptable given the model's overall precision.</p>
+        <p style="font-size:10.5pt">The model correctly identifies <strong>285 of 374 actual churners</strong> in the test set. The 89 it misses are an acceptable trade-off at this precision; lowering the 0.50 decision threshold would catch more, at the cost of more false alarms.</p>
       </div>
     </div>
   </div>
@@ -501,9 +501,10 @@ tbody td{padding:6pt 9pt;border-bottom:1px solid var(--border);vertical-align:to
           <tr><td><span class="priority p-critical"></span><strong>Critical Risk</strong> (prob ≥ 0.70)</td><td class="td-val td-red">1,511</td><td>Contact within 30 days</td></tr>
           <tr><td><span class="priority p-high"></span><strong>High Risk</strong> (0.50 to 0.70)</td><td class="td-val td-orange">696</td><td>Targeted retention offer</td></tr>
           <tr><td><span class="priority p-medium"></span><strong>Medium Risk</strong> (0.30 to 0.50)</td><td class="td-val">962</td><td>Nurture and monitor</td></tr>
-          <tr><td><strong style="color:var(--green)">Low Risk</strong> (&lt; 0.30)</td><td class="td-val td-green">3,874</td><td>Standard service</td></tr>
+          <tr><td><strong style="color:var(--green)">Low Risk</strong> (&lt; 0.30)</td><td class="td-val td-green">3,805</td><td>Standard service</td></tr>
         </tbody>
       </table>
+      <p style="font-size:8.5pt;color:#6B7A8D;margin-top:2pt">Tiers shown for the 6,974 scored customers; 69 records carry no risk tier in the export.</p>
     </div>
     <div>
       <div class="callout">

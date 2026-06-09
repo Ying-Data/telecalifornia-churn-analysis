@@ -1,7 +1,11 @@
-# Raw data (too large, link to Kaggle instead)
-telecom_customer_churn.csv
-telecom_data_dictionary.csv
-telecom_zipcode_population.csv
+# Data files are ignored, except the published export and report.
+# Raw Kaggle files (link to Kaggle instead): telecom_customer_churn.csv,
+# telecom_data_dictionary.csv, telecom_zipcode_population.csv.
+*.csv
+!data/telecom_clean_powerbi.csv
+*.xlsx
+!output/TeleCalifornia_Churn_Report.xlsx
+~$*.xls
 
 # Python auto-generated files
 __pycache__/
@@ -12,15 +16,29 @@ __pycache__/
 # Jupyter notebooks (only show polished .py)
 *.ipynb
 
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
 # OS files
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Editor folders
 .vscode/
 .idea/
 
+# Logs
+*.log
+
+# Node (for any tooling that pulls it in)
+node_modules/
+
 # Secrets (NEVER push these)
+.env
 *.env
 credentials.json
 config.yaml
