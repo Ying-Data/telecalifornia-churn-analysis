@@ -133,8 +133,13 @@ For the full methodology and a guide to exploring the dashboard, see [docs/metho
 
 ## About
 
-**Ying Zhao**, Data Analyst based in Antwerp, Belgium. Business intelligence, Power BI, Python, and end-to-end data storytelling.
+**Ying Zhao**, BI &amp; Data Analyst for commercial and supply-chain teams. Antwerp on-site, Belgium remote.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-weiying--zhao-blue?logo=linkedin)](https://linkedin.com/in/weiying-zhao)
+Eight years on the commercial side (a EUR 2M client book at 95% retention) before I built the analytics, so I read data the way an owner reads a P&L: start from the decision, then build the SQL and the model that move it.
+
+Tools: Python (pandas, scikit-learn), SQL, Power BI, Excel, Git.
+
+[![Portfolio](https://img.shields.io/badge/Portfolio-ying--data.github.io-e0712e)](https://ying-data.github.io/portfolio/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-weiying--zhao-blue?logo=linkedin)](https://www.linkedin.com/in/weiying-zhao/)
 [![GitHub](https://img.shields.io/badge/GitHub-Ying--Data-black?logo=github)](https://github.com/Ying-Data)
 [![Email](https://img.shields.io/badge/Email-weiying.data%40gmail.com-red?logo=gmail)](mailto:weiying.data@gmail.com)
