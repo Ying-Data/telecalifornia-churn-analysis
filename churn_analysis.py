@@ -486,7 +486,10 @@ print("ANALYSIS COMPLETE: KEY FINDINGS SUMMARY")
 print("=" * 60)
 
 churn_rate = churned_n / (churned_n + stayed_n) * 100
-annual_loss = churned_rev / df.loc[df["Customer Status"] == "Churned", "Tenure in Months"].mean() * 12
+# Annual run-rate lost: the current monthly charges of churned customers, annualised.
+annual_loss = df.loc[df["Customer Status"] == "Churned", "Monthly Charge"].sum() * 12
+# Annual recurring revenue still carried by the Critical Risk tier (what retention protects).
+critical_arr = df.loc[df["Churn_Risk_Tier"] == "Critical Risk", "Monthly Charge"].sum() * 12
 
 print(f"""
   DATA
@@ -520,5 +523,5 @@ print(f"""
 
   TOP RECOMMENDATION
      Contact the top 200 Critical Risk customers first.
-     Estimated annual revenue at stake: ~$1.76M.
+     Critical Risk tier: {tier_counts.get('Critical Risk', 0):,} customers, ~${critical_arr:,.0f} annual recurring revenue.
 """)
